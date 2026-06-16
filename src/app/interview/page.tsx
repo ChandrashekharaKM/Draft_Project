@@ -101,7 +101,7 @@ export default function InterviewPage() {
               <div className="w-full space-y-6 animate-fade-in">
                 <div className="bg-[#131B2F]/50 backdrop-blur-md p-6 rounded-2xl border border-white/10">
                   <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-2">Your Answer</span>
-                  <p className="text-slate-300 italic font-medium leading-relaxed">"{submittedAnswer}"</p>
+                  <p className="text-slate-300 italic font-medium leading-relaxed">&quot;{submittedAnswer}&quot;</p>
                 </div>
                 <EvaluationPanel evaluation={evaluation} />
               </div>

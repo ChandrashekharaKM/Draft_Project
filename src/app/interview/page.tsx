@@ -4,12 +4,20 @@ import { InterviewSetupForm } from '@/components/interview/InterviewSetupForm';
 import { QuestionCard } from '@/components/interview/QuestionCard';
 import { NextQuestionButton } from '@/components/interview/NextQuestionButton';
 import { generateQuestions } from '@/services/interview';
+import { AnswerInput } from '@/components/evaluation/AnswerInput';
+import { EvaluationPanel } from '@/components/evaluation/EvaluationPanel';
+import { evaluateAnswer, EvaluationResult } from '@/services/evaluation';
 
 export default function InterviewPage() {
   const [questions, setQuestions] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Candidate 2 state hooks
+  const [evaluation, setEvaluation] = useState<EvaluationResult | null>(null);
+  const [isEvaluating, setIsEvaluating] = useState(false);
+  const [submittedAnswer, setSubmittedAnswer] = useState('');
 
   const handleStart = async (domain: string, difficulty: string, resume: File | null, jobDesc: string) => {
     setIsLoading(true);
@@ -27,9 +35,26 @@ export default function InterviewPage() {
     setIsLoading(false);
   };
 
+  const handleAnswerSubmit = async (answer: string) => {
+    setIsEvaluating(true);
+    setSubmittedAnswer(answer);
+    try {
+      const result = await evaluateAnswer(answer);
+      setEvaluation(result);
+    } catch (error) {
+      console.error("AI Evaluation failed:", error);
+      alert("Failed to evaluate your answer. Please try again.");
+    } finally {
+      setIsEvaluating(false);
+    }
+  };
+
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(prev => prev + 1);
+      // Reset Candidate 2 evaluation state for the next question
+      setEvaluation(null);
+      setSubmittedAnswer('');
     } else {
       alert("Interview Completed! Proceeding to AI Evaluation...");
       // Route to Candidate 3's Score page eventually
@@ -66,20 +91,33 @@ export default function InterviewPage() {
             totalQuestions={questions.length} 
           />
           
-          {/* Candidate 2 Placeholder */}
-          <div className="w-full bg-[#131B2F] p-12 rounded-3xl shadow-xl border border-white/5 text-center text-slate-400 font-medium text-lg relative overflow-hidden group">
-             <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-             <span className="relative z-10 text-indigo-300/70">[ Candidate 2: AI Evaluation Module (Answer Input) goes here ]</span>
+          {/* Answer Input and Evaluation Panel Integration */}
+          <div className="w-full">
+            {evaluation ? (
+              <div className="w-full space-y-6 animate-fade-in">
+                <div className="bg-[#131B2F]/50 backdrop-blur-md p-6 rounded-2xl border border-white/10">
+                  <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-2">Your Answer</span>
+                  <p className="text-slate-300 italic font-medium leading-relaxed">"{submittedAnswer}"</p>
+                </div>
+                <EvaluationPanel evaluation={evaluation} />
+              </div>
+            ) : (
+              <AnswerInput onSubmit={handleAnswerSubmit} isLoading={isEvaluating} />
+            )}
           </div>
 
-          <div className="w-full flex justify-end">
-            <NextQuestionButton 
-              onClick={handleNext} 
-              isLast={currentIndex === questions.length - 1} 
-            />
-          </div>
+          {/* Navigation - Only allow moving forward once evaluation is available */}
+          {evaluation && (
+            <div className="w-full flex justify-end animate-fade-in">
+              <NextQuestionButton 
+                onClick={handleNext} 
+                isLast={currentIndex === questions.length - 1} 
+              />
+            </div>
+          )}
         </div>
       )}
     </main>
   );
 }
+

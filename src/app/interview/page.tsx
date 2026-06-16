@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { CategorySelector } from '@/components/interview/CategorySelector';
+import { InterviewSetupForm } from '@/components/interview/InterviewSetupForm';
 import { QuestionCard } from '@/components/interview/QuestionCard';
 import { NextQuestionButton } from '@/components/interview/NextQuestionButton';
 import { generateQuestions } from '@/services/interview';
@@ -11,14 +11,15 @@ export default function InterviewPage() {
   const [isStarted, setIsStarted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleStart = async (domain: string, difficulty: string) => {
+  const handleStart = async (domain: string, difficulty: string, resume: File | null, jobDesc: string) => {
     setIsLoading(true);
-    // Simulate API call using our service
+    // Simulate API call using our service (you could pass resume and jobDesc here in the future)
     const generated = await generateQuestions(domain, difficulty);
+    
     // Fallback if not implemented yet
     const dummyQuestions = generated.length > 0 ? generated : [
-      `How would you optimize a slow-loading ${domain} application?`,
-      `Explain a complex technical concept you recently learned in ${domain}.`,
+      `Based on your resume, how would you optimize a slow-loading ${domain} application?`,
+      `The job description mentions scaling. Explain a complex technical scaling concept you recently learned.`,
       `What are the most common pitfalls you face at a ${difficulty} level?`
     ];
     setQuestions(dummyQuestions);
@@ -31,36 +32,44 @@ export default function InterviewPage() {
       setCurrentIndex(prev => prev + 1);
     } else {
       alert("Interview Completed! Proceeding to AI Evaluation...");
-      // In reality, we'd route to evaluation
+      // Route to Candidate 3's Score page eventually
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 font-sans">
-      
+    <main className="flex-1 max-w-6xl mx-auto px-6 py-12 flex flex-col items-center justify-center w-full">
       {!isStarted ? (
-        <div className="w-full flex justify-center transition-all duration-700 transform translate-y-0 opacity-100">
+        <div className="w-full flex flex-col items-center animate-fade-in-up">
+          <div className="text-center max-w-2xl mb-12">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+              Your Personal <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">AI Interviewer</span>
+            </h1>
+            <p className="text-lg text-slate-400 font-light">
+              Upload your resume and the target job description. Our AI will generate a tailored mock interview just for you.
+            </p>
+          </div>
+          
           {isLoading ? (
-            <div className="flex flex-col items-center bg-white p-12 rounded-3xl shadow-2xl">
-              <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-blue-600 mb-6"></div>
-              <p className="text-2xl font-bold text-gray-800 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Generating AI Questions...</p>
+            <div className="flex flex-col items-center bg-[#131B2F]/80 p-12 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-xl">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-500 mb-6"></div>
+              <p className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Analyzing Profile & Generating Questions...</p>
             </div>
           ) : (
-            <CategorySelector onSelect={handleStart} />
+            <InterviewSetupForm onStart={handleStart} />
           )}
         </div>
       ) : (
-        <div className="w-full max-w-4xl flex flex-col items-center space-y-10 transition-all duration-700 opacity-100">
+        <div className="w-full max-w-4xl flex flex-col items-center space-y-10 animate-fade-in mt-10">
           <QuestionCard 
             question={questions[currentIndex]} 
             questionNumber={currentIndex + 1} 
             totalQuestions={questions.length} 
           />
           
-          {/* Candidate 2's AnswerInput will go here eventually */}
-          <div className="w-full bg-white p-12 rounded-3xl shadow-md border-2 border-dashed border-gray-300 text-center text-gray-400 font-medium text-lg relative overflow-hidden group">
-             <div className="absolute inset-0 bg-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-             <span className="relative z-10">[ Candidate 2: AI Evaluation Module (Answer Input) goes here ]</span>
+          {/* Candidate 2 Placeholder */}
+          <div className="w-full bg-[#131B2F] p-12 rounded-3xl shadow-xl border border-white/5 text-center text-slate-400 font-medium text-lg relative overflow-hidden group">
+             <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+             <span className="relative z-10 text-indigo-300/70">[ Candidate 2: AI Evaluation Module (Answer Input) goes here ]</span>
           </div>
 
           <div className="w-full flex justify-end">
@@ -71,6 +80,6 @@ export default function InterviewPage() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

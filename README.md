@@ -1,61 +1,11 @@
 # Team Setup & Antigravity Workflow
 
-## Step 1: Initialize Git and Configure .gitignore
-Before running your first Antigravity agent or committing code, you must protect your repository from getting bloated by agent log files.
-
-1. Open your terminal or command prompt and navigate to your project folder:
-```bash
-cd path/to/your/project
-```
-
-2. Initialize your local Git repository:
-```bash
-git init
-```
-
-3. Create a file named `.gitignore` in the root of your project folder and paste the exact rules we discussed (already created in this template).
-
----
-
-## Step 2: Create the Repository on GitHub
-1. Go to [GitHub](https://github.com) and log in.
-2. Click the **New** button (or the **+** icon in the top right) to create a new repository.
-3. Name your repository and give it a description.
-4. **Important:** Leave "Add a README file", "Add .gitignore", and "Choose a license" **unchecked** (since you already created your project files locally).
-5. Click **Create repository**.
-
----
-
-## Step 3: Link Your Project and Push to GitHub
-GitHub will show you a page with a few commands. Run these exact commands in your terminal to link your local project to GitHub and push your initial setup:
-
-```bash
-# Add all your project files (including the .gitignore)
-git add .
-
-# Create your first commit
-git commit -m "Initial commit: Project setup with Antigravity gitignore rules"
-
-# Rename your default branch to main
-git branch -M main
-
-# Link your local repo to GitHub (Replace with your actual GitHub URL from the webpage)
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-
-# Push your code to GitHub
-git push -u origin main
-```
-
----
-
-## Step 4: Add Your Team Members
-Because this is a shared single project, your teammates need permission to push changes to the repository.
-
-1. On your GitHub repository page, click the **Settings** tab at the top.
-2. On the left sidebar, click **Collaborators**.
-3. Click the **Add people** button.
-4. Type your teammates' GitHub usernames or email addresses and invite them.
-5. Once they accept the invite via email or their GitHub notification dashboard, they can clone the project!
+## What We've Done So Far (Steps 1-4)
+The initial setup for this repository is complete! Here is a summary of what was done to get us here:
+1. **Initialized Git and Configured `.gitignore`**: We created a local Git repository and set up a `.gitignore` to prevent agent log files (`.antigravity/`, `.agents/cache/`) and standard dependencies from bloating the repository.
+2. **Created the Repository on GitHub**: The remote repository was created on GitHub.
+3. **Linked and Pushed to GitHub**: The initial setup, including the `.gitignore` and this README, was pushed to the `main` branch.
+4. **Added Team Members**: Team members have been invited as collaborators to the repository.
 
 ---
 
@@ -63,8 +13,8 @@ Because this is a shared single project, your teammates need permission to push 
 When a teammate wants to start working on the project, they just need to clone it:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/ChandrashekharaKM/Draft_Project.git
+cd Draft_Project
 ```
 
 ### The "Golden Rule" for Antigravity Teamwork:
@@ -87,3 +37,11 @@ git pull origin main
 ```
 
 Your local session history and massive log files (`.antigravity/` and `.agents/cache/`) will remain hidden on your respective machines, ensuring a perfectly clean, collaborative workspace!
+
+---
+
+## What To Do Next
+* Wait for all team members to accept their repository invites and clone the project locally.
+* Decide on the core project requirements and technology stack.
+* Assign initial tasks and components for each team member to work on in parallel.
+* Spin up parallel Antigravity sessions to build the components, making sure to pull the latest updates frequently.

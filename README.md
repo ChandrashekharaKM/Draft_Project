@@ -1,28 +1,78 @@
-# Team Setup & Antigravity Workflow
+# 🚀 Prep4Interview - AI Interview Portal
 
-## What We've Done So Far (Steps 1-4)
-The initial setup for this repository is complete! Here is a summary of what was done to get us here:
-1. **Initialized Git and Configured `.gitignore`**: We created a local Git repository and set up a `.gitignore` to prevent agent log files (`.antigravity/`, `.agents/cache/`) and standard dependencies.
-2. **Created the Repository on GitHub**: The remote repository was created on GitHub.
-3. **Linked and Pushed to GitHub**: The initial setup, including the `.gitignore` and this README, was pushed to the `main` branch.
-4. **Added Team Members**: Team members have been invited as collaborators to the repository.
+Welcome to the **Prep4Interview** AI Interview Portal! This advanced Next.js application allows candidates to upload their resume, paste a target job description, and instantly receive dynamic, AI-tailored mock interview questions and evaluations.
+
+![Prep4Interview Mock Interview UI](https://via.placeholder.com/1000x500.png?text=Prep4Interview+Dashboard)
 
 ---
 
-## Step 5: How Your Team Should Work (The Team Workflow)
-When a teammate wants to start working on the project, they just need to clone it:
+## ✨ Core Features
+* 📄 **Contextual AI Generation**: Upload a Resume (PDF/DOCX) and paste a Job Description to generate highly specific interview questions.
+* 🎯 **Dynamic Difficulty**: Choose between Easy (Junior), Medium (Mid-Level), or Hard (Senior) difficulty levels across multiple domains (Frontend, Backend, DevOps, Data Science, etc.).
+* 💬 **Immersive Question Engine**: Proceed through a focused, distraction-free interview card interface.
+* 🤖 **AI Evaluation Module (Coming Soon)**: Get real-time scoring on technical accuracy and communication skills.
+* 📊 **Progress Tracking (Coming Soon)**: Monitor session history and track your improvement graph over time.
 
+---
+
+## 🛠️ Tech Stack
+* **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+* **Language**: [TypeScript](https://www.typescriptlang.org/)
+* **Styling**: [Tailwind CSS](https://tailwindcss.com/) (Glassmorphism & Dark Mode)
+* **Icons**: Inline SVGs
+
+---
+
+## 🚀 How to Run Locally
+
+### 1. Install Dependencies
 ```bash
-git clone https://github.com/ChandrashekharaKM/Draft_Project.git
-cd Draft_Project
+npm install
 ```
 
-### The "Golden Rule" for Antigravity Teamwork:
+### 2. Start the Development Server
+```bash
+npm run dev
+# If you are on Windows and get a script execution policy error, run:
+npm.cmd run dev
+```
+
+### 3. Open in Browser
+Visit [http://localhost:3000](http://localhost:3000) to see the dashboard.
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                  # Next.js App Router
+│   ├── page.tsx          # Main Dashboard
+│   ├── layout.tsx        # Global Layout (Navbar)
+│   └── interview/        # Interview Flow & Setup
+│       └── page.tsx      
+├── components/           # Reusable UI Components
+│   ├── layout/
+│   │   └── Navbar.tsx    # Global Navigation
+│   └── interview/        # Mock Interview Components
+│       ├── InterviewSetupForm.tsx
+│       ├── QuestionCard.tsx
+│       └── NextQuestionButton.tsx
+└── services/             # Mock/AI Logic APIs
+    ├── evaluation.ts     # (Candidate 2 logic)
+    ├── feedback.ts       # (Candidate 3 logic)
+    ├── interview.ts      # (Candidate 1 logic)
+    └── progress.ts       # (Candidate 4 logic)
+```
+
+---
+
+## 👥 Team Collaboration Workflow
+
+### The "Golden Rule"
 Whenever you or your teammates create a Custom Skill or behavior tweak for the Antigravity agent, those files will live inside the `.agents/skills/` directory.
 
 **To share a custom skill:**
-Whenever someone builds a useful skill for the agent, they should stage and commit it just like regular code:
-
 ```bash
 git add .agents/skills/
 git commit -m "feat: added custom code-refactoring skill for Antigravity agent"
@@ -31,64 +81,28 @@ git push origin main
 
 **To get updates:**
 Before starting a session, always pull the latest updates so your local Antigravity agent learns the skills your team members just pushed:
-
 ```bash
 git pull origin main
 ```
 
-Your local session history and massive log files (`.antigravity/` and `.agents/cache/`) will remain hidden on your respective machines, ensuring a perfectly clean, collaborative workspace!
+### Daily Git Workflow
+1. **Always start by pulling the latest changes:**
+   ```bash
+   git checkout main
+   git pull origin main
+   ```
+2. **Checkout your feature branch and merge main into it:**
+   ```bash
+   git checkout feature/<your-feature>
+   git merge main
+   ```
+3. **Commit your work and push your branch:**
+   ```bash
+   git add .
+   git commit -m "feat: your feature description"
+   git push origin feature/<your-feature>
+   ```
+4. **Create a Pull Request** on GitHub for the Project Lead to review and merge.
 
 ---
-
-## What To Do Next
-### Timeline & Responsibilities
-
-| Task | Owner | Target Date | Status |
-|------|-------|-------------|--------|
-| All team members accept invites and clone repo locally | All Team Members | 
-| Define core project requirements and technology stack | _TBD_ |
-| Assign initial tasks and components for parallel work | Project Lead |
-| Begin parallel Antigravity sessions | All Team Members |
-
-**Remember:** Pull frequently before starting each session to stay in sync with your team's latest skill updates!
-
----
-
-## Troubleshooting Common Git Issues
-
-### Merge Conflicts
-If you encounter merge conflicts when pulling updates:
-```bash
-git status                    # See which files have conflicts
-git diff                      # Review the conflicting changes
-# Edit files to resolve conflicts manually
-git add .
-git commit -m "resolve: merge conflicts from team updates"
-git push origin main
-```
-
-### Accidentally Committed Local Files
-If you committed `.antigravity/` or `.agents/cache/` files by mistake:
-```bash
-git rm --cached .antigravity/ .agents/cache/ -r
-git commit -m "remove: local cache files from git tracking"
-git push origin main
-```
-
-### Sync with Latest Main Branch
-If your branch is behind main:
-```bash
-git fetch origin
-git rebase origin/main
-# or merge if you prefer:
-git merge origin/main
-```
-
----
-
-## Communication & Project Management
-- **Primary Channel:** _[Add your team communication channel - Slack, Discord, etc.]_
-- **Project Board:** _[Link to GitHub Projects board or external tool]_
-- **Decision Log:** _[Where major decisions are recorded]_
-
-_Note: Update these links as your team establishes them._
+_Built with ❤️ for AI-assisted interview preparation._

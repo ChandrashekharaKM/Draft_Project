@@ -1,0 +1,9 @@
+# Ignore local Antigravity states, caches, and massive session logs
+.antigravity/
+.agents/cache/
+*.pb
+
+# Standard ignores (Node, Python, etc. depending on your tech stack)
+node_modules/
+__pycache__/
+.env

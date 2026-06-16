@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Evaluation Service TypeScript Interface
 export interface EvaluationResult {
   score: number;
@@ -101,6 +102,11 @@ export const evaluateAnswer = async (answer: string): Promise<EvaluationResult> 
   if (strengths.length === 0) strengths.push("Successfully submitted answer for review.");
   if (improvements.length === 0) improvements.push("Perfect response. Try checking edge cases for the given scenario.");
 
+=======
+// Evaluation Service
+export const evaluateAnswer = async (_answer: string) => {
+  // TODO: implement AI evaluation
+>>>>>>> a2be87d (fix: resolve typescript linting errors)
   return {
     score,
     relevance,

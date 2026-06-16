@@ -14,12 +14,16 @@ export default function InterviewPage() {
   const [isStarted, setIsStarted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+<<<<<<< HEAD
   // Candidate 2 state hooks
   const [evaluation, setEvaluation] = useState<EvaluationResult | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [submittedAnswer, setSubmittedAnswer] = useState('');
 
   const handleStart = async (domain: string, difficulty: string, resume: File | null, jobDesc: string) => {
+=======
+  const handleStart = async (domain: string, difficulty: string, _resume: File | null, _jobDesc: string) => {
+>>>>>>> a2be87d (fix: resolve typescript linting errors)
     setIsLoading(true);
     // Simulate API call using our service (you could pass resume and jobDesc here in the future)
     const generated = await generateQuestions(domain, difficulty);

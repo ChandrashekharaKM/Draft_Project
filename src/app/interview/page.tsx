@@ -170,7 +170,7 @@ export default function InterviewPage() {
               Your AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 font-extrabold">Evaluation Report</span>
             </h1>
             <p className="text-base text-slate-400 font-medium">
-              We've analyzed your responses. Review your overall scores, core performance metrics, and growth roadmap.
+              We&apos;ve analyzed your responses. Review your overall scores, core performance metrics, and growth roadmap.
             </p>
           </div>
 

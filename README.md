@@ -45,10 +45,10 @@ Your local session history and massive log files (`.antigravity/` and `.agents/c
 
 | Task | Owner | Target Date | Status |
 |------|-------|-------------|--------|
-| All team members accept invites and clone repo locally | All Team Members | Day 1 | ⏳ |
-| Define core project requirements and technology stack | _TBD_ | Day 2-3 | ⏳ |
-| Assign initial tasks and components for parallel work | Project Lead | Day 3 | ⏳ |
-| Begin parallel Antigravity sessions | All Team Members | Day 4+ | ⏳ |
+| All team members accept invites and clone repo locally | All Team Members | 
+| Define core project requirements and technology stack | _TBD_ |
+| Assign initial tasks and components for parallel work | Project Lead |
+| Begin parallel Antigravity sessions | All Team Members |
 
 **Remember:** Pull frequently before starting each session to stay in sync with your team's latest skill updates!
 

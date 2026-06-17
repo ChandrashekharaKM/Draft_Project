@@ -14,6 +14,9 @@ import { PerformanceMeter } from '@/components/feedback/PerformanceMeter';
 import { FeedbackCard } from '@/components/feedback/FeedbackCard';
 import { generateFeedback, FeedbackReport } from '@/services/feedback';
 
+// Dashboard Progress Tracking
+import { trackProgress } from '@/services/progress';
+
 export default function InterviewPage() {
   const [questions, setQuestions] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -87,7 +90,15 @@ export default function InterviewPage() {
         const report = await generateFeedback(evaluations);
         setFeedbackReport(report);
 
-        // Save session data to localStorage for history & statistics (Candidate 4 support)
+        // Save session data using trackProgress for the progress dashboard
+        await trackProgress({
+          domain: domain || 'General Technical',
+          difficulty: difficulty || 'Medium',
+          score: report.overallScore,
+          duration: `${Math.max(5, questions.length * 5)} mins`
+        });
+
+        // Save detailed session data to localStorage for history & statistics (Candidate 4 support)
         const savedSessionsStr = typeof window !== 'undefined' ? localStorage.getItem('interview_sessions') || '[]' : '[]';
         const sessions = JSON.parse(savedSessionsStr);
         const newSession = {

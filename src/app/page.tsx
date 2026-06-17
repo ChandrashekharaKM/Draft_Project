@@ -22,13 +22,12 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col items-center w-full">
+    <main className="min-h-screen bg-zinc-50 dark:bg-[#0f1423] flex-1 flex flex-col items-center w-full">
       <div className="max-w-6xl mx-auto px-6 py-10 sm:py-20 w-full">
-        
-        {/* Hero Section (from main) */}
+        {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-16 animate-fade-in-up">
           <h1 className="text-5xl md:text-6xl font-extrabold text-zinc-900 dark:text-white mb-6 tracking-tight leading-tight">
-            Professional AI Resume & <br/>
+            Professional AI Resume & <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 dark:from-indigo-400 dark:to-purple-400">
               Document Suite
             </span>
@@ -38,7 +37,7 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Tools Grid (from main) */}
+        {/* Tools Grid */}
         <div className="w-full flex justify-center mb-20">
           <Link href="/interview" className="block w-full max-w-md group">
             <div className="bg-white dark:bg-[#131B2F] border border-zinc-200 dark:border-white/5 hover:border-indigo-500/30 rounded-2xl p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1 relative overflow-hidden">
@@ -58,4 +57,37 @@ export default function Home() {
                   <p className="text-zinc-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
                     Optimize your interview skills against target job requirements and resolve AI interview questionnaires.
                   </p>
-                  <div className="flex
+                  <div className="flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-semibold group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">
+                    Start Session 
+                    <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Dashboard Section */}
+        <div className="mx-auto max-w-5xl space-y-8 pt-10 border-t border-zinc-200 dark:border-white/10">
+          <div className="pb-5">
+            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+              Your Dashboard
+            </h2>
+            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+              Monitor mock interview progress, historical scores, and overall metrics.
+            </p>
+          </div>
+
+          {/* Statistics KPI Grid */}
+          <StatisticsCard statistics={statistics} />
+
+          {/* Score Improvement Chart */}
+          <ProgressChart history={history} />
+
+          {/* History Table */}
+          <HistoryTable history={history} />
+        </div>
+      </div>
+    </main>
+  );
+}

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Progress Service Types
 
 export interface SessionHistory {

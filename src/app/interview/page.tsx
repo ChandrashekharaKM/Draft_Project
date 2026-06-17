@@ -36,7 +36,7 @@ export default function InterviewPage() {
   const [isAggregating, setIsAggregating] = useState(false);
   const [feedbackReport, setFeedbackReport] = useState<FeedbackReport | null>(null);
 
-  const handleStart = async (domainVal: string, difficultyVal: string, _resume: File | null, _jobDesc: string) => {
+  const handleStart = async (domainVal: string, difficultyVal: string, _resume: File | null, _jobDesc: string, numQuestions: number) => {
     setIsLoading(true);
     setDomain(domainVal);
     setDifficulty(difficultyVal);
@@ -47,13 +47,14 @@ export default function InterviewPage() {
     setFeedbackReport(null);
     setCurrentIndex(0);
 
-    const generated = await generateQuestions(domainVal, difficultyVal);
+    const generated = await generateQuestions(domainVal, difficultyVal, numQuestions);
     
-    const dummyQuestions = generated.length > 0 ? generated : [
-      `Based on your resume, how would you optimize a slow-loading ${domainVal} application?`,
-      `The job description mentions scaling. Explain a complex technical scaling concept you recently learned.`,
-      `What are the most common pitfalls you face at a ${difficultyVal} level?`
-    ];
+    // Fallback if AI generation failed
+    let dummyQuestions = generated;
+    if (!generated || generated.length === 0) {
+      dummyQuestions = Array.from({ length: numQuestions }, (_, i) => `Sample question ${i + 1} for ${domainVal} at ${difficultyVal} level?`);
+    }
+
     setQuestions(dummyQuestions);
     setIsStarted(true);
     setIsLoading(false);

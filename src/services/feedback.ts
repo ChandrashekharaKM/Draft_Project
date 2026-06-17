@@ -1,4 +1,6 @@
+"use server";
 import { EvaluationResult } from "./evaluation";
+import { GoogleGenAI } from '@google/genai';
 
 export interface FeedbackSuggestion {
   category: string;
@@ -17,9 +19,6 @@ export interface FeedbackReport {
 }
 
 export const generateFeedback = async (evaluations: EvaluationResult[]): Promise<FeedbackReport> => {
-  // Simulate processing delay of 1 second for aggregation
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   if (!evaluations || evaluations.length === 0) {
     return {
       overallScore: 0,
@@ -32,7 +31,7 @@ export const generateFeedback = async (evaluations: EvaluationResult[]): Promise
     };
   }
 
-  // Aggregate scores by averaging
+  // Aggregate scores
   const count = evaluations.length;
   let totalScore = 0;
   let totalRelevance = 0;
@@ -51,86 +50,56 @@ export const generateFeedback = async (evaluations: EvaluationResult[]): Promise
   const communicationScore = Math.round(totalCommunication / count);
   const technicalAccuracyScore = Math.round(totalTechAccuracy / count);
 
-  // Consolidate unique strengths and improvements
-  const strengthsSet = new Set<string>();
-  const improvementsSet = new Set<string>();
+  try {
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const prompt = `You are a career coach reviewing an interview performance.
+The candidate achieved these average scores:
+- Overall: ${overallScore}%
+- Relevance: ${relevanceScore}%
+- Communication: ${communicationScore}%
+- Technical Accuracy: ${technicalAccuracyScore}%
 
-  evaluations.forEach(ev => {
-    ev.strengths.forEach(s => strengthsSet.add(s));
-    ev.improvements.forEach(imp => improvementsSet.add(imp));
-  });
+Based on these scores and an aggregation of their performance, generate a JSON object with:
+- "strengths": Array of up to 4 strings summarizing their key strengths.
+- "improvements": Array of up to 4 strings summarizing areas of improvement.
+- "suggestions": Array of exactly 3 objects, each with:
+    - "category": e.g. "Technical Depth", "Response Structure", etc.
+    - "description": A short sentence describing their performance in this category.
+    - "actionableStep": A concrete actionable tip for improvement.
 
-  // Convert sets to arrays
-  let strengths = Array.from(strengthsSet);
-  let improvements = Array.from(improvementsSet);
+Provide only the JSON object, without any markdown formatting like \`\`\`json.`;
 
-  // Fallbacks if empty
-  if (strengths.length === 0) {
-    strengths.push("Successfully submitted all response answers.");
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+    });
+    
+    let text = response.text || "{}";
+    if (text.startsWith("\`\`\`json")) {
+      text = text.replace(/^\`\`\`json\n/, "").replace(/\n\`\`\`$/, "");
+    }
+    
+    const feedbackData = JSON.parse(text);
+    return {
+      overallScore,
+      relevanceScore,
+      communicationScore,
+      technicalAccuracyScore,
+      strengths: feedbackData.strengths || ["Successfully submitted all response answers."],
+      improvements: feedbackData.improvements || ["Focus on advanced system scenarios next time."],
+      suggestions: feedbackData.suggestions || []
+    };
+  } catch (error) {
+    console.error("AI Feedback Generation failed:", error);
+    // Fallback
+    return {
+      overallScore,
+      relevanceScore,
+      communicationScore,
+      technicalAccuracyScore,
+      strengths: ["Completed the interview."],
+      improvements: ["Feedback generation unavailable."],
+      suggestions: []
+    };
   }
-  if (improvements.length === 0) {
-    improvements.push("Perfect marks on basic guidelines. Try answering more challenging system scenarios.");
-  }
-
-  // Limit to top 4 strengths and improvements for readable UI
-  strengths = strengths.slice(0, 4);
-  improvements = improvements.slice(0, 4);
-
-  // Generate customized suggestions based on score thresholds
-  const suggestions: FeedbackSuggestion[] = [];
-
-  // Suggestion for Technical Accuracy
-  if (technicalAccuracyScore < 80) {
-    suggestions.push({
-      category: "Technical Depth",
-      description: `Your average technical accuracy score was ${technicalAccuracyScore}%. You need to incorporate more domain-specific concepts and underlying engineering mechanics in your responses.`,
-      actionableStep: "When answering, explicitly mention frameworks, API patterns, architectural constraints, database index types, or specific rendering strategies (e.g. Server Components, static generation) depending on the question."
-    });
-  } else {
-    suggestions.push({
-      category: "Advanced System Design",
-      description: "You demonstrated solid technical accuracy. To reach an elite level, start articulating edge cases, scale limits, and reliability tradeoffs (like CAP theorem nuances or fallback strategies).",
-      actionableStep: "In your next responses, focus on system performance at scale: mention throughput/latency limits, rate limiting, and cache invalidation strategies."
-    });
-  }
-
-  // Suggestion for Communication
-  if (communicationScore < 80) {
-    suggestions.push({
-      category: "Response Structure",
-      description: `Your communication score of ${communicationScore}% indicates that some answers lacked structured delivery or depth.`,
-      actionableStep: "Practice using frameworks like STAR (Situation, Task, Action, Result) or CARL (Context, Action, Result, Learning) to organize your responses so they flow logically and are easy to follow."
-    });
-  } else {
-    suggestions.push({
-      category: "Leadership & Collaboration",
-      description: "Your communication style is highly effective, structured, and easy to understand.",
-      actionableStep: "In future interviews, weave in stories highlighting mentorship, leading technical alignment (e.g. RFC reviews), and managing expectations of cross-functional partners."
-    });
-  }
-
-  // Suggestion for Relevance
-  if (relevanceScore < 85) {
-    suggestions.push({
-      category: "Direct Answering Style",
-      description: "Sometimes the response drifted slightly from the core problem statement or lacked sufficient elaboration on the core ask.",
-      actionableStep: "Take a moment to map out your answer's key components first. Start with a direct 1-sentence answer addressing the core problem, then build out the supporting technical detail."
-    });
-  } else {
-    suggestions.push({
-      category: "Contextual Alignment",
-      description: "Your responses are highly aligned to the questions asked.",
-      actionableStep: "Ensure you tailor your answers to the specific size and stage of the target company (e.g., speed and scrappiness for early-stage startups vs. scalability and process for enterprise)."
-    });
-  }
-
-  return {
-    overallScore,
-    relevanceScore,
-    communicationScore,
-    technicalAccuracyScore,
-    strengths,
-    improvements,
-    suggestions
-  };
 };

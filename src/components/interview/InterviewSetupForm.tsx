@@ -2,12 +2,13 @@
 import React, { useState, useRef } from 'react';
 
 interface SetupFormProps {
-  onStart: (domain: string, difficulty: string, resume: File | null, jobDesc: string) => void;
+  onStart: (domain: string, difficulty: string, resume: File | null, jobDesc: string, numQuestions: number) => void;
 }
 
 export const InterviewSetupForm: React.FC<SetupFormProps> = ({ onStart }) => {
   const [domain, setDomain] = useState('Software Engineering');
   const [difficulty, setDifficulty] = useState('Medium');
+  const [numQuestions, setNumQuestions] = useState(10);
   const [jobDesc, setJobDesc] = useState('');
   const [resume, setResume] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -20,7 +21,15 @@ export const InterviewSetupForm: React.FC<SetupFormProps> = ({ onStart }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onStart(domain, difficulty, resume, jobDesc);
+    if (!resume) {
+      alert("Please upload your resume.");
+      return;
+    }
+    if (!jobDesc.trim()) {
+      alert("Please provide the job description.");
+      return;
+    }
+    onStart(domain, difficulty, resume, jobDesc, numQuestions);
   };
 
   return (
@@ -32,7 +41,7 @@ export const InterviewSetupForm: React.FC<SetupFormProps> = ({ onStart }) => {
       
       <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Domain */}
           <div>
             <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">Domain Focus</label>
@@ -62,11 +71,24 @@ export const InterviewSetupForm: React.FC<SetupFormProps> = ({ onStart }) => {
               <option className="bg-[#131B2F]">Hard (Senior)</option>
             </select>
           </div>
+
+          {/* Number of Questions */}
+          <div>
+            <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">Questions</label>
+            <input 
+              type="number"
+              min="1"
+              max="50"
+              value={numQuestions} 
+              onChange={(e) => setNumQuestions(Number(e.target.value) || 1)}
+              className="w-full border border-white/10 bg-white/5 p-3 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-white font-medium outline-none"
+            />
+          </div>
         </div>
 
         {/* Resume Upload */}
         <div>
-          <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">Upload Resume (Optional)</label>
+          <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">Upload Resume (Required)</label>
           <div 
             className={`border-2 border-dashed ${resume ? 'border-indigo-500 bg-indigo-500/10' : 'border-white/20 bg-white/5'} rounded-2xl p-6 text-center cursor-pointer hover:border-indigo-500 hover:bg-white/10 transition-all duration-300`}
             onClick={() => fileInputRef.current?.click()}
@@ -94,7 +116,7 @@ export const InterviewSetupForm: React.FC<SetupFormProps> = ({ onStart }) => {
 
         {/* Job Description */}
         <div>
-          <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">Job Description (Optional)</label>
+          <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">Job Description (Required)</label>
           <textarea 
             value={jobDesc}
             onChange={(e) => setJobDesc(e.target.value)}

@@ -10,8 +10,8 @@ Welcome to the **Prep4Interview** AI Interview Portal! This advanced Next.js app
 * 📄 **Contextual AI Generation**: Upload a Resume (PDF/DOCX) and paste a Job Description to generate highly specific interview questions.
 * 🎯 **Dynamic Difficulty**: Choose between Easy (Junior), Medium (Mid-Level), or Hard (Senior) difficulty levels across multiple domains (Frontend, Backend, DevOps, Data Science, etc.).
 * 💬 **Immersive Question Engine**: Proceed through a focused, distraction-free interview card interface.
-* 🤖 **AI Evaluation Module (Coming Soon)**: Get real-time scoring on technical accuracy and communication skills.
-* 📊 **Progress Tracking (Coming Soon)**: Monitor session history and track your improvement graph over time.
+* 🤖 **AI Evaluation Module**: Get real-time scoring on technical accuracy and communication skills using Google's Gemini API.
+* 📊 **Progress Tracking**: Monitor session history and track your improvement graph over time.
 
 ---
 
@@ -30,7 +30,17 @@ Welcome to the **Prep4Interview** AI Interview Portal! This advanced Next.js app
 npm install
 ```
 
-### 2. Start the Development Server
+### 2. Configure API Key
+Create a `.env` file in the root directory (you can copy `.env.example`):
+```bash
+cp .env.example .env
+```
+Open the `.env` file and add your Google Gemini API Key:
+```env
+GEMINI_API_KEY=YOUR_API_KEY_HERE
+```
+
+### 3. Start the Development Server
 ```bash
 npm run dev
 # If you are on Windows and get a script execution policy error, run:
